@@ -1,19 +1,34 @@
 package com.github.cleytonorocha.webservice_jpa_springBoot.recources;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.cleytonorocha.webservice_jpa_springBoot.entities.User;
+import com.github.cleytonorocha.webservice_jpa_springBoot.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserRecourse {
 	
+	@Autowired
+	private UserService service;
+
 	@GetMapping
-	public ResponseEntity<User> findAll(){
-		User user = new User(1L, "Maria", "maria@gmail.com", "999909","12345");
+	public ResponseEntity<List<User>> findAll(){
+		List<User> list = service.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<User> findById(@PathVariable Long id){
+		User user = service.findById(id);
 		return ResponseEntity.ok().body(user);
 	}
+
 }
